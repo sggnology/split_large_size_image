@@ -1,20 +1,20 @@
 import sharp from 'sharp';
 import fs from 'fs/promises';
 
-// 이미지 분할 함수
-const splitImage = async (imagePath, outputDir) => {
+// Image Spliting Function
+const splitImage = async (imagePath, separateCount) => {
     const image = sharp(imagePath);
     const { width, height } = await image.metadata();
 
-    const partWidth = width / 5;
+    const partWidth = width / separateCount;
     const partHeight = height;
 
     console.log(`이미지 크기: ${width}x${height}`);
     console.log(`PART 용지 크기: ${partWidth}x${partHeight}`);
 
-    const imageBuffers = await Promise.all(Array.from({ length: 5 }, (_, i) => {
+    const imageBuffers = await Promise.all(Array.from({ length: separateCount }, (_, i) => {
 
-        console.log(`이미지 ${i + 1} 부분 추출 중...`);
+        console.log(`Image index: ${i + 1}, extracting...`);
 
         const image1 = sharp(imagePath);
 
@@ -32,25 +32,23 @@ const splitImage = async (imagePath, outputDir) => {
             .toBuffer()
     }));
 
-    await fs.mkdir(outputDir, { recursive: true });
-
     await Promise.all(imageBuffers.map((buffer, index) => {
-        const outputPath = `${outputDir}/output_part_${index + 1}.jpg`;
+        const outputPath = `./source_out/output_part_${index + 1}.png`;
         return fs.writeFile(outputPath, buffer);
     }));
 
-    console.log('이미지 분할 및 저장 완료');
+    console.log('Image spliting Done!');
 };
 
 // 실행 함수
-const main = async () => {
+const main = async (separateCount) => {
     try {
         const imagePath = './source_in/image.png'; // 이미지 경로
-        const outputDir = 'source_out'; // 출력 디렉토리
-        await splitImage(imagePath, outputDir);
+        
+        await splitImage(imagePath, separateCount);
     } catch (error) {
         console.error('오류 발생:', error);
     }
 };
 
-main();
+main(5);
