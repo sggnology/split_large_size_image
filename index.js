@@ -1,6 +1,11 @@
 import sharp from 'sharp';
 import fs from 'fs/promises';
 
+// For a4 paper standard (pixel, 300 DPI)
+// (mm * DPI)/inch = mm/inch * DPI[Pixel], inch = 25.4mm
+const a4WidthInPixels = Math.round(210 * 300 / 25.4); // 2480px
+const a4HeightInPixels = Math.round(297 * 300 / 25.4); // 3508px
+
 // Image Spliting Function
 const splitImage = async (imagePath, separateCount) => {
     const image = sharp(imagePath);
@@ -29,6 +34,7 @@ const splitImage = async (imagePath, separateCount) => {
 
         return image1
             .extract(imageSizeJson)
+            .resize(a4WidthInPixels, a4HeightInPixels)
             .toBuffer()
     }));
 
@@ -51,4 +57,4 @@ const main = async (separateCount) => {
     }
 };
 
-main(5);
+main(4);
