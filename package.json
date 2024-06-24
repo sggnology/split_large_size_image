@@ -1,0 +1,23 @@
+{
+  "name": "printable-page-generator",
+  "version": "1.0.0",
+  "description": "To print using split The Big Content.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "big",
+    "content",
+    "print",
+    "large",
+    "width"
+  ],
+  "author": "sggnology",
+  "license": "ISC",
+  "dependencies": {
+    "sharp": "^0.33.4"
+  },
+  "type": "module"
+}
